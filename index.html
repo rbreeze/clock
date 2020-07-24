@@ -14,14 +14,24 @@
 			height: 100%;
 			background: black;
 		}
-		.clock {
+		.container {
+			display: flex; 
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
+		}
+		.row {
 			display: flex;
+			width: 100%;
+			padding: 1em 0;
+		}
+		.clock {
 			font-size: 350px;
 			color: white;
 			font-family: 'Inter';
 			font-weight: 600;
-			width: 100%;
-			height: 100%;
 			align-items: center;
 			justify-content: center;
 		}
@@ -50,24 +60,56 @@
 		.clock #seperator {
 			color: #242424;
 		}
+		.settings {
+			position: absolute;
+			justify-content: flex-end;
+			bottom: 0;
+		}
+		.settings:hover > .button{
+			background: #1f1f1f;
+			color: #c9c9c9;
+		}
+		.settings .button {
+			background: black;
+			font-family: Helvetica, sans-serif;
+			padding: 5px 8px;
+			border-radius: 3px;
+			cursor: pointer;
+			font-weight: 600;
+			margin-right: 15px;
+		}
 	</style>
 </head>
 
 <body> 
-	<div class="clock"> 
-		<div class="ticker" id="hour">0</div>
-		<div id="seperator">:</div>
-		<div class="minutes">
-			<div class="ticker" id="minute-left">0</div>
-			<div class="ticker" id="minute-right">0</div>
+	<div class="container"> 
+		<div class="clock row"> 
+			<div class="ticker" id="hour">0</div>
+			<div id="seperator">:</div>
+			<div class="minutes">
+				<div class="ticker" id="minute-left">0</div>
+				<div class="ticker" id="minute-right">0</div>
+			</div>
+		</div>
+		<div class="settings row"> 
+			<div class="button" id="military" onclick="toggleMilitary()">24 hour time</div>
 		</div>
 	</div>
-
 <script>
 var showSeperator = true; 
 var counter = 0; 
+var military = false; 
+var pm = false;
+setTime(); 
 
-setInterval(function() {
+function toggleMilitary() {
+	military = !military;
+	button = document.getElementById("military"); 
+	button.innerHTML = military ? "12 hour time" : "24 hour time"
+	setTime(); 
+}
+
+function setTime() {
 	date = new Date(); 
 	hour = date.getHours();
 	minutes = date.getMinutes();
@@ -82,10 +124,18 @@ setInterval(function() {
 		tickers[ticker] = document.getElementById(tickers[ticker]);
 	}
 
+	if (!military) {
+		tmp = hour; 
+		hour = hour % 12;
+		pm = tmp-hour > 0; 
+	}
 	tickers.hour.innerHTML = hour;
 	tickers.minuteLeft.innerHTML = Math.floor(minutes/10);
 	tickers.minuteRight.innerHTML = minutes%10;
+}
 
+setInterval(function() {
+	setTime();
 	seperator = document.getElementById("seperator"); 
 	seperator.style.color = showSeperator ? "#242424" : "black"; 
 	showSeperator = !showSeperator; 
