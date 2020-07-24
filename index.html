@@ -1,0 +1,95 @@
+<!DOCTYPE HTML> 
+<html>
+<head> 
+	<title>Clock</title>
+	<style> 
+		@font-face {
+			src: url("./i.ttf");
+			font-family: 'Inter';
+		}
+		body, html {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+			background: black;
+		}
+		.clock {
+			display: flex;
+			font-size: 350px;
+			color: white;
+			font-family: 'Inter';
+			font-weight: 600;
+			width: 100%;
+			height: 100%;
+			align-items: center;
+			justify-content: center;
+		}
+		.clock .ticker {
+			background: #1f1f1f;
+			border-radius: 15px;
+			text-align: center;
+			padding: 0 50px;
+			position: relative;
+			margin: 5px;
+		}
+		.clock .ticker::after {
+			content: "";
+			display: block;
+			height: 22px;
+			width: 100%;
+			background: black;
+			position: absolute;
+			left: 0;
+			top: 50%;
+			margin-top: -11px;
+		}
+		.clock .minutes {
+			display: flex;
+		}
+		.clock #seperator {
+			color: #242424;
+		}
+	</style>
+</head>
+
+<body> 
+	<div class="clock"> 
+		<div class="ticker" id="hour">0</div>
+		<div id="seperator">:</div>
+		<div class="minutes">
+			<div class="ticker" id="minute-left">0</div>
+			<div class="ticker" id="minute-right">0</div>
+		</div>
+	</div>
+
+<script>
+var showSeperator = true; 
+var counter = 0; 
+
+setInterval(function() {
+	date = new Date(); 
+	hour = date.getHours();
+	minutes = date.getMinutes();
+
+	tickers = {
+		hour: "hour", 
+		minuteLeft: "minute-left",
+		minuteRight: "minute-right"
+	}
+
+	for (var ticker of Object.keys(tickers)) {
+		tickers[ticker] = document.getElementById(tickers[ticker]);
+	}
+
+	tickers.hour.innerHTML = hour;
+	tickers.minuteLeft.innerHTML = Math.floor(minutes/10);
+	tickers.minuteRight.innerHTML = minutes%10;
+
+	seperator = document.getElementById("seperator"); 
+	seperator.style.color = showSeperator ? "#242424" : "black"; 
+	showSeperator = !showSeperator; 
+}, 1000);
+</script>
+</body>
+</html>
